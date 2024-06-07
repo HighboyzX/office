@@ -45,6 +45,15 @@ const router = createBrowserRouter([
   },
 ]);
 
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.bsCustomFileInput) {
+    window.bsCustomFileInput.init();
+  } else {
+    console.error('bsCustomFileInput is not loaded');
+  }
+});
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <RouterProvider router={router} />
 )

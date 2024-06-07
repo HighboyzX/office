@@ -6,6 +6,7 @@ import Preloader from "../../components/Preloader";
 import Modal from "../../components/Modal";
 import LabelWithAsterisk from "../../components/LabelWithAsterisk";
 import { Select2, SelectStatus, SelectGender } from "../../components/Select2";
+import CustomFileInput from "../../components/CustomFileInput";
 
 import { _msg } from "../../messages/MsgTh";
 import * as Utils from '../../components/Utils';
@@ -42,6 +43,8 @@ function MgrUser() {
         confirm_password: ''
     }
     const [changePaasword, setChangePaasword] = useState(initialChangePasswordState);
+
+    const [selectedExcelFile, setSelectedExcelFile] = useState(null);
 
     useEffect(() => {
         fetchUsers();
@@ -113,14 +116,14 @@ function MgrUser() {
 
 
             if (response.success) {
-                if(user.user_id) await Utils.setLocal(response.data);
-                
+                if (user.user_id) await Utils.setLocal(response.data);
+
                 Utils.closeModal('#closeModal');
                 Utils.showAlert(_msg.save_successfully, 'success', Utils.reload);
             } else if (response.status == 401) {
                 Utils.showAlert(_msg.error_duplicate_user, 'warning');
             } else if (response.status == 400) {
-                Utils.showAlert(_msg.error_regex_user_pass, 'warning') 
+                Utils.showAlert(_msg.error_regex_user_pass, 'warning')
             } else {
                 Utils.showAlert(response.error, 'error');
             }
@@ -184,6 +187,35 @@ function MgrUser() {
         }
     }
 
+    const handleExcelImport = async (e) => {
+        e.preventDefault();
+
+        if (selectedExcelFile) {
+            try {
+                const formData = new FormData();
+                formData.append('fileExcel', selectedExcelFile);
+
+                console.log('selectedExcelFile: ', selectedExcelFile);
+
+                const response = await Utils.axiosPOST('/user/importExcel', Config.multiHeaders(), formData);
+
+                if (response.success) {
+                    Utils.closeModal('#closeImportExcelModal');
+                    // Utils.showAlert(_msg.import_file_successfully, 'success', Utils.reload);
+                    Utils.showAlert(_msg.import_file_successfully, 'success');
+                } else {
+                    Utils.showAlert(response.error, 'error');
+                }
+            } catch (err) {
+                Utils.showAlert(err.message, 'error');
+            }
+        }
+    };
+
+    const resetExcelForm = () => {
+        setSelectedExcelFile(null);
+    };
+
 
     return (
         <>
@@ -206,7 +238,7 @@ function MgrUser() {
                             className="btn btn-success"
                             data-toggle="modal"
                             data-target="#importExcelModal"
-                        // onClick={resetExcelForm}
+                            onClick={resetExcelForm}
                         >
                             <i className="far fa-file-import mr-2"></i>
                             {_msg.import_excel}
@@ -607,6 +639,17 @@ function MgrUser() {
                                 />
                             </div>
                         </div>
+                    </Modal>
+                    <Modal id='importExcelModal' title={_msg.title_upload_file} event={handleExcelImport} closeModalButton='closeImportExcelModal'>
+                        <CustomFileInput
+                            label={_msg.title_upload_file}
+                            id='importExcelInput'
+                            isRequired={true}
+                            onChange={Utils.handleFileInputChange(setSelectedExcelFile)}
+                        />
+                        <a href="exampleFile/importUserData.xlsx" download="importUserData.xlsx" className="text-xs ml-1">
+                            {_msg.title_sample_file}
+                        </a>
                     </Modal>
 
                 </BackOffice>

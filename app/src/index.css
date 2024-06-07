@@ -375,3 +375,17 @@
 .text-opacity-100 {
     --text-opacity: 1
 }
+
+.dataTables_length {
+    float: left;
+    margin-right: 10px;
+}
+
+.dt-buttons {
+    float: left;
+    margin-right: 10px;
+}
+
+.dataTables_filter {
+    float: right;
+}

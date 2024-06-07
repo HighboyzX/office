@@ -265,6 +265,43 @@ export const setDataTables = (selector) => {
         $(selector).DataTable({
             "scrollX": true,
             "autoWidth": true,
+            dom: '<"top"lBf>rt<"bottom"ip><"clear">',
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-sm btn-info' // ปรับแต่ง class ของปุ่ม
+                    }
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Data export excel',
+                        text: 'Excel'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Data export pdf',
+                        text: 'PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print'
+                    }
+                ]
+            },
+            language: {
+                search: '<span>'+_msg.title_search+' : </span> _INPUT_'
+                ,lengthMenu: '<span>'+_msg.title_show+' : _MENU_  '+_msg.title_entries+'</span> '
+                ,paginate: { 'first': _msg.title_page_first, 'last': _msg.title_page_last, 'next': _msg.title_next, 'previous': _msg.title_previous }
+                ,emptyTable:   _msg.title_no_data
+                ,info: _msg.title_showing + ' _START_ ' +_msg.title_to + ' _END_ ' +_msg.title_from_2 + ' _TOTAL_ ' +_msg.title_entries
+                ,infoEmpty: _msg.title_showing + ' 0 ' +_msg.title_to + ' 0 ' +_msg.title_from_2 + ' 0 ' +_msg.title_entries
+                ,loadingRecords: _msg.loading
+                ,zeroRecords: _msg.title_data_not_found
+                ,infoFiltered : '( '+_msg.title_search+_msg.title_from_2+_msg.title_all+' _MAX_ '+_msg.title_entries+' )'
+            },
+            lengthMenu: [ [3,10, 25, 50, 100, 200, 500, -1], [3,10, 25, 50, 100, 200, 500, _msg.title_all] ],
+            pageLength : 10
         });
     }
 }

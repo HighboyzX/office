@@ -20,6 +20,8 @@ const updateInfomation = require('./api/user/updateInfomation');
 Router.put('/user/updateInfomation', checkLogin, updateInfomation.validate, updateInfomation.uploadImage, updateInfomation.update, getUserLocal);
 const deleteUser = require('./api/user/deleteData');
 Router.delete('/user/deleteData/:id', checkLogin, deleteUser.validate, deleteUser.delete);
+const importUser = require('./api/user/importUserDataFromExcel');
+Router.post('/user/importExcel', checkLogin, importUser.validate, importUser.insert);
 
 const select2Controller = require('./api/select2/getData');
 Router.get('/select2/userType', checkLogin, select2Controller.validate, select2Controller.userType);

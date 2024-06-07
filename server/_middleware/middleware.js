@@ -12,7 +12,6 @@ Middleware.use(FileUpload());
 Middleware.use(Cors());
 
 Middleware.use('/image',Express.static('_src/image'));
-// Middleware.use('/image/user',Express.static('_src/image/user'));
 
 Middleware.use(ResponseMiddleware);
 
