@@ -1,4 +1,4 @@
-const Bcrypt = require('bcrypt');
+const Bcrypt = require('bcryptjs');
 const Moment = require('moment');
 
 const Pg = require('../../_db/postgresql');

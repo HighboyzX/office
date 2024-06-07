@@ -1,4 +1,4 @@
-const Bcrypt = require('bcrypt');
+const Bcrypt = require('bcryptjs');
 const Pg = require('../../_db/postgresql');
 const Logger = require('../../_helper/Logger');
 

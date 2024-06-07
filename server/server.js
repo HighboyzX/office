@@ -2,7 +2,7 @@ const Express = require('express');
 const App = Express();
 const Dotenv = require('dotenv');
 Dotenv.config();
-const Port = process.env.PORT || 8080;
+const Port = process.env.PORT || 3001;
 
 const Middleware = require('./_middleware/middleware');
 const Router = require('./routes');
