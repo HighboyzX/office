@@ -25,5 +25,8 @@ Router.post('/user/importExcel', checkLogin, importUser.validate, importUser.ins
 
 const select2Controller = require('./api/select2/getData');
 Router.get('/select2/userType', checkLogin, select2Controller.validate, select2Controller.userType);
+Router.get('/select2/province', checkLogin, select2Controller.validate, select2Controller.province);
+Router.get('/select2/district', checkLogin, select2Controller.validate, select2Controller.district);
+Router.get('/select2/districtSub', checkLogin, select2Controller.validate, select2Controller.districtSub);
 
 module.exports = Router;

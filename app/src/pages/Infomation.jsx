@@ -119,17 +119,6 @@ function Infomation() {
                                                 ref={imageFileInput}
                                                 onChange={Utils.handleFileInputChange(setSelectedImage)}
                                             />
-                                            {/* <div className="custom-file mb-4">
-                                                <input
-                                                    type="file"
-                                                    className="custom-file-input form-control-border"
-                                                    id="imageFileInput"
-                                                    name="imageFileInput"
-                                                    ref={imageFileInput}
-                                                    onChange={Utils.handleFileInputChange(setSelectedImage)}
-                                                />
-                                                <label className="custom-file-label" htmlFor="imageFileInput">{_msg.choose_file}</label>
-                                            </div> */}
                                         </div>
                                     </div>
                                 </div>

@@ -36,6 +36,8 @@ export const _msg = {
     , select_all: 'เลือกทั้งหมด'
     , choose_file: 'เลือกไฟล์  '
     , not_choose_file: 'ไม่ได้เลือกไฟล์ใด'
+    , please_choose_file: 'กรุณาเลือกไฟล์'
+    , attach_file: 'แนบไฟล์เอกสาร'
     , go_back: 'ย้อนกลับ'
     , code: 'รหัส'
 

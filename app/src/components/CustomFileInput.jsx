@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react'
-
+import { useEffect, useRef } from 'react';
 import LabelWithAsterisk from './LabelWithAsterisk';
 
-function CustomFileInput({ label, id, isRequired, onChange }) {
+export const CustomFileInput = ({ label, id, isRequired, onChange }) => {
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -10,6 +9,7 @@ function CustomFileInput({ label, id, isRequired, onChange }) {
             window.bsCustomFileInput.init();
         }
     }, []);
+
     return (
         <div className="form-group mb-0">
             <LabelWithAsterisk label={label} isRequired={isRequired} />
@@ -24,12 +24,9 @@ function CustomFileInput({ label, id, isRequired, onChange }) {
                         onChange={onChange}
                         required={isRequired}
                     />
-                    <label className="custom-file-label" htmlFor={id}>
-                    </label>
+                    <label className="custom-file-label" htmlFor={id}><span className='text-sm text-muted'></span></label>
                 </div>
             </div>
         </div>
-    )
+    );
 }
-
-export default CustomFileInput

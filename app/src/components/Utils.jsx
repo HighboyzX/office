@@ -6,6 +6,8 @@ import Moment from 'moment';
 
 import { Config } from './Config';
 import { _msg } from '../messages/MsgTh';
+import { exportTableToExcel } from './Export2Excel';
+import { exportTableToPDF } from './Export2PDF';
 
 // Authentication
 export const isAuthenticated = () => {
@@ -260,7 +262,8 @@ export const resetFileInput = async (fileInput) => {
 }
 
 // Datatables
-export const setDataTables = (selector) => {
+export const setDataTables = (selector, title,columnsToExport) => {
+    const fileName = title + '_' + Moment().format('DD_MM_YYYY');
     if (!$.fn.DataTable.isDataTable(selector)) {
         $(selector).DataTable({
             "scrollX": true,
@@ -275,33 +278,35 @@ export const setDataTables = (selector) => {
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Data export excel',
-                        text: 'Excel'
+                        title: fileName,
+                        text: 'Excel',
+                        action: function (e, dt, button, config) {
+                            exportTableToExcel(e, dt, button, config, columnsToExport);
+                        }
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'Data export pdf',
-                        text: 'PDF'
-                    },
-                    {
-                        extend: 'print',
-                        text: 'Print'
+                        title: fileName,
+                        text: 'PDF',
+                        action: function (e, dt, button, config) {
+                            exportTableToPDF(e, dt, button, config, columnsToExport);
+                        }
                     }
                 ]
             },
             language: {
-                search: '<span>'+_msg.title_search+' : </span> _INPUT_'
-                ,lengthMenu: '<span>'+_msg.title_show+' : _MENU_  '+_msg.title_entries+'</span> '
-                ,paginate: { 'first': _msg.title_page_first, 'last': _msg.title_page_last, 'next': _msg.title_next, 'previous': _msg.title_previous }
-                ,emptyTable:   _msg.title_no_data
-                ,info: _msg.title_showing + ' _START_ ' +_msg.title_to + ' _END_ ' +_msg.title_from_2 + ' _TOTAL_ ' +_msg.title_entries
-                ,infoEmpty: _msg.title_showing + ' 0 ' +_msg.title_to + ' 0 ' +_msg.title_from_2 + ' 0 ' +_msg.title_entries
-                ,loadingRecords: _msg.loading
-                ,zeroRecords: _msg.title_data_not_found
-                ,infoFiltered : '( '+_msg.title_search+_msg.title_from_2+_msg.title_all+' _MAX_ '+_msg.title_entries+' )'
+                search: '<span>' + _msg.title_search + ' : </span> _INPUT_'
+                , lengthMenu: '<span>' + _msg.title_show + ' : _MENU_  ' + _msg.title_entries + '</span> '
+                , paginate: { 'first': _msg.title_page_first, 'last': _msg.title_page_last, 'next': _msg.title_next, 'previous': _msg.title_previous }
+                , emptyTable: _msg.title_no_data
+                , info: _msg.title_showing + ' _START_ ' + _msg.title_to + ' _END_ ' + _msg.title_from_2 + ' _TOTAL_ ' + _msg.title_entries
+                , infoEmpty: _msg.title_showing + ' 0 ' + _msg.title_to + ' 0 ' + _msg.title_from_2 + ' 0 ' + _msg.title_entries
+                , loadingRecords: _msg.loading
+                , zeroRecords: _msg.title_data_not_found
+                , infoFiltered: '( ' + _msg.title_search + _msg.title_from_2 + _msg.title_all + ' _MAX_ ' + _msg.title_entries + ' )'
             },
-            lengthMenu: [ [3,10, 25, 50, 100, 200, 500, -1], [3,10, 25, 50, 100, 200, 500, _msg.title_all] ],
-            pageLength : 10
+            lengthMenu: [[10, 25, 50, 100, 200, 500, -1], [10, 25, 50, 100, 200, 500, _msg.title_all]],
+            pageLength: 10
         });
     }
 }

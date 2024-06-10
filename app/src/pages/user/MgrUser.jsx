@@ -1,12 +1,12 @@
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import BackOffice from "../../components/BackOffice";
 import Preloader from "../../components/Preloader";
 import Modal from "../../components/Modal";
 import LabelWithAsterisk from "../../components/LabelWithAsterisk";
 import { Select2, SelectStatus, SelectGender } from "../../components/Select2";
-import CustomFileInput from "../../components/CustomFileInput";
+import { CustomFileInput } from "../../components/CustomFileInput";
 
 import { _msg } from "../../messages/MsgTh";
 import * as Utils from '../../components/Utils';
@@ -31,9 +31,11 @@ function MgrUser() {
     };
     const [user, setUser] = useState(initialUserState);
     const [selectedImage, setSelectedImage] = useState(null);
-    const imageFileInput = useRef(null);
 
     const [userTypeList, setUserTypeList] = useState([]);
+    const [provinceList, setProvinceList] = useState([]);
+    const [districtList, setDistrictList] = useState([]);
+    const [districSubtList, setDistrictSubList] = useState([]);
     const [isDisabled, setIsDisabled] = useState(false);
 
     const initialChangePasswordState = {
@@ -47,22 +49,34 @@ function MgrUser() {
     const [selectedExcelFile, setSelectedExcelFile] = useState(null);
 
     useEffect(() => {
-        fetchUsers();
-        fetchUserType();
+        fetchData();
     }, []);
 
     useEffect(() => {
+        const columnsToExport = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
         if (userList.length > 0) {
-            Utils.setDataTables('#dataTables');
+            Utils.setDataTables('#dataTables', _msg.user, columnsToExport);
         }
     }, [userList]);
+
+    const fetchData = async () => {
+        await initalFetch();
+        setIsLoading(false);
+    }
+
+    const initalFetch = async () => {
+        fetchUsers();
+        fetchUserType();
+        // fetchProvince();
+        // fetchDistrict();
+        // fetchDistrictSub();
+    }
 
     const fetchUsers = async () => {
         try {
             const response = await Utils.axiosGET('/user/getDataList', Config.authHeaders());
             if (response.success && response.data) {
                 setUserList(response.data);
-                setIsLoading(false);
             } else {
                 Utils.showAlert(response.error, 'error');
             }
@@ -76,8 +90,47 @@ function MgrUser() {
             const response = await Utils.axiosGET('/select2/userType', Config.authHeaders());
             if (response.success && response.data) {
                 setUserTypeList(response.data);
-                setIsLoading(false);
             } else {
+                Utils.showAlert(response.error, 'error');
+            }
+        } catch (err) {
+            Utils.showAlert(err.message, 'error');
+        }
+    }
+
+    const fetchProvince = async () => {
+        try {
+            const response = await Utils.axiosGET('/select2/province', Config.authHeaders());
+            if (response.success && response.data) {
+                setProvinceList(response.data);
+            } else {
+                Utils.showAlert(response.error, 'error');
+            }
+        } catch (err) {
+            Utils.showAlert(err.message, 'error');
+        }
+    }
+
+    const fetchDistrict = async () => {
+        try {
+            const response = await Utils.axiosGET('/select2/district', Config.authHeaders());
+            if (response.success && response.data) {
+                setDistrictList(response.data);
+            } else {
+                Utils.showAlert(response.error, 'error');
+            }
+        } catch (err) {
+            Utils.showAlert(err.message, 'error');
+        }
+    }
+
+    const fetchDistrictSub = async () => {
+        try {
+            const response = await Utils.axiosGET('/select2/districtSub', Config.authHeaders());
+            if (response.success && response.data) {
+                setDistrictSubList(response.data);
+            } else {
+                setDistrictSubList
                 Utils.showAlert(response.error, 'error');
             }
         } catch (err) {
@@ -136,7 +189,6 @@ function MgrUser() {
     const resetUserForm = () => {
         setUser(initialUserState);
         setSelectedImage({});
-        Utils.resetFileInput(imageFileInput.current);
         setIsDisabled(false);
     }
 
@@ -210,11 +262,11 @@ function MgrUser() {
                 Utils.showAlert(err.message, 'error');
             }
         }
-    };
+    }
 
     const resetExcelForm = () => {
         setSelectedExcelFile(null);
-    };
+    }
 
 
     return (
@@ -349,13 +401,9 @@ function MgrUser() {
 
                         <div className="row">
                             <div className="col-lg-12 mb-2">
-                                <LabelWithAsterisk label={_msg.image} isRequired={false} />
-                                <input
-                                    type="file"
-                                    className="form-control mt-1"
-                                    id="imageFileInput"
-                                    name="imageFileInput"
-                                    ref={imageFileInput}
+                                <CustomFileInput
+                                    label={_msg.image}
+                                    id='imageFileInput'
                                     onChange={Utils.handleFileInputChange(setSelectedImage)}
                                 />
                             </div>
@@ -640,9 +688,9 @@ function MgrUser() {
                             </div>
                         </div>
                     </Modal>
-                    <Modal id='importExcelModal' title={_msg.title_upload_file} event={handleExcelImport} closeModalButton='closeImportExcelModal'>
+                    <Modal id='importExcelModal' title={_msg.user} event={handleExcelImport} closeModalButton='closeImportExcelModal'>
                         <CustomFileInput
-                            label={_msg.title_upload_file}
+                            label={_msg.attach_file}
                             id='importExcelInput'
                             isRequired={true}
                             onChange={Utils.handleFileInputChange(setSelectedExcelFile)}
