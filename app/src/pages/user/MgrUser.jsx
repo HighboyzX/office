@@ -1,12 +1,12 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import BackOffice from "../../components/BackOffice";
 import Preloader from "../../components/Preloader";
 import Modal from "../../components/Modal";
 import LabelWithAsterisk from "../../components/LabelWithAsterisk";
 import { Select2, SelectStatus, SelectGender } from "../../components/Select2";
-import { CustomFileInput } from "../../components/CustomFileInput";
+import CustomFileInput from "../../components/CustomFileInput";
 
 import { _msg } from "../../messages/MsgTh";
 import * as Utils from '../../components/Utils';
@@ -31,13 +31,12 @@ function MgrUser() {
     };
     const [user, setUser] = useState(initialUserState);
     const [selectedImage, setSelectedImage] = useState(null);
-
+    const imageFileRef = useRef(null);
     const [userTypeList, setUserTypeList] = useState([]);
     const [provinceList, setProvinceList] = useState([]);
     const [districtList, setDistrictList] = useState([]);
     const [districSubtList, setDistrictSubList] = useState([]);
     const [isDisabled, setIsDisabled] = useState(false);
-
     const initialChangePasswordState = {
         user_id: '',
         old_password: '',
@@ -45,8 +44,8 @@ function MgrUser() {
         confirm_password: ''
     }
     const [changePaasword, setChangePaasword] = useState(initialChangePasswordState);
-
     const [selectedExcelFile, setSelectedExcelFile] = useState(null);
+    const excelFileRef = useRef(null);
 
     useEffect(() => {
         fetchData();
@@ -188,7 +187,8 @@ function MgrUser() {
 
     const resetUserForm = () => {
         setUser(initialUserState);
-        setSelectedImage({});
+        setSelectedImage(null);
+        Utils.resetFileInput(imageFileRef.current);
         setIsDisabled(false);
     }
 
@@ -266,6 +266,7 @@ function MgrUser() {
 
     const resetExcelForm = () => {
         setSelectedExcelFile(null);
+        Utils.resetFileInput(excelFileRef.current);
     }
 
 
@@ -404,6 +405,7 @@ function MgrUser() {
                                 <CustomFileInput
                                     label={_msg.image}
                                     id='imageFileInput'
+                                    ref={imageFileRef}
                                     onChange={Utils.handleFileInputChange(setSelectedImage)}
                                 />
                             </div>
@@ -693,6 +695,7 @@ function MgrUser() {
                             label={_msg.attach_file}
                             id='importExcelInput'
                             isRequired={true}
+                            ref={excelFileRef}
                             onChange={Utils.handleFileInputChange(setSelectedExcelFile)}
                         />
                         <a href="exampleFile/importUserData.xlsx" download="importUserData.xlsx" className="text-xs ml-1">
