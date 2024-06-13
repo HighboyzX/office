@@ -3,7 +3,7 @@ const Bcrypt = require('bcryptjs');
 const Pg = require('../../_db/postgresql');
 const Logger = require('../../_helper/Logger');
 
-const { setFileName } = require('../../_utils/utils');
+const { generateTimestampedFileName } = require('../../_utils/utils');
 
 exports.validate = (req, res, next) => {
     if (!req.body) {
@@ -17,7 +17,7 @@ exports.uploadImage = async (req, res, next) => {
     try {
         if (req.files != undefined && req.files.profile_pic != undefined) {
             const image = req.files.profile_pic;
-            const fileName = await setFileName(image);
+            const fileName = await generateTimestampedFileName(image);
             const pathFile = './_src/image/user/' + fileName;
 
             image.mv(pathFile, (err) => {

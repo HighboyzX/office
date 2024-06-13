@@ -1,5 +1,6 @@
 export const Config = {
     localhost: 'http://localhost:3001',
+    // production: 'http://localhost:3001',
     authHeaders: () => {
         return {
             headers: {

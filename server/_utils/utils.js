@@ -5,7 +5,7 @@ Dotenv.config();
 const Pg = require('../_db/postgresql');
 const Logger = require('../_helper/Logger');
 
-exports.checkLogin = async (req, res, next) => {
+exports.authenticateUser = async (req, res, next) => {
     try {
         const authToken = req.headers['authorization'];
 
@@ -25,7 +25,7 @@ exports.checkLogin = async (req, res, next) => {
     }
 }
 
-exports.getUserLocal = async (req, res, next) => {
+exports.getAuthenticatedUser = async (req, res, next) => {
     try {
         const authToken = req.headers['authorization'];
         const sql = 'SELECT user_id,user_type_id,username,name,profile_pic FROM db_user WHERE user_id = $1';
@@ -38,7 +38,7 @@ exports.getUserLocal = async (req, res, next) => {
     }
 }
 
-exports.setFileName = (image) => {
+exports.generateTimestampedFileName = (image) => {
     const toDay = new Date();
     const y = toDay.getFullYear();
     const m = toDay.getMonth();
